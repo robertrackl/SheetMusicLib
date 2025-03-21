@@ -1,0 +1,29 @@
+﻿@page "/ArrangementsList"
+@using SheetMusicLib.Models  // Make sure to add the namespace of your model classes
+@using Microsoft.EntityFrameworkCore
+@inject RamLibContext RamLibContext
+
+<h3>List of Arrangements</h3>
+
+@if (liArrgs == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <ul>
+        @foreach (var item in liArrgs)
+        {
+            <li>@item.STitle</li>
+        }
+    </ul>
+}
+
+@code {
+    private List<Arrangement>? liArrgs;
+
+    protected override async Task OnInitializedAsync()
+    {
+        liArrgs = await RamLibContext.Arrangements.ToListAsync();
+    }
+}

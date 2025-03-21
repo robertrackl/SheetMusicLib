@@ -1,0 +1,62 @@
+# Compiled Object files, Libraries, Executables, and Packages
+*.class
+*.dll
+*.exe
+*.o
+*.so
+*.dylib
+*.pyc
+*.swp
+*.lock
+packages/
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio files
+.vs/
+*.suo
+*.user
+*.userprefs
+*.vspscc
+*.vssscc
+*.csproj.user
+*.vbproj.user
+*.dbmdl
+_ReSharper*/
+*.DotSettings.user
+
+# NuGet related ignores
+[Pp]ackages/
+*.nupkg
+*.snupkg
+nuget.config
+NuGet.Config
+
+# Deployment related ignores
+/publish/
+/deploy/
+
+# SQL Server files (if you plan to generate migrations locally, don't ignore .mdf)
+*.mdf
+*.ldf
+
+# User secrets
+secrets.json
+
+# Configuration files that might contain sensitive information
+appsettings.Development.json
+*.config
+
+# Temporary files
+*.[Tt]mp
+*.log
+
+# Other
+Thumbs.db
+Desktop.ini
+.DS_Store
+*.bak
+*.swp
+
+# Node.js
+node_modules/
