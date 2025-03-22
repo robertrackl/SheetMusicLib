@@ -1,6 +1,25 @@
 ﻿@inherits LayoutComponentBase
+@using SheetMusicLib.Models
+@using SheetMusicLib.Services
 
-<div class="page">
+<style>
+    :root {
+    --background-color: @CurrentTheme.sBackColor;
+    --text-color: @CurrentTheme.sForeColor;
+    --primary-color: @CurrentTheme.sPrimaryColor;
+    }
+
+    .page {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    }
+
+    .nav-menu {
+    background-color: var(--primary-color);
+    }
+</style>
+
+<div class="page" style="@GetPageStyle()">
     <div class="sidebar">
         <NavMenu />
     </div>
@@ -21,3 +40,17 @@
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
+
+@code{
+    private Theme CurrentTheme { get; set; } = new Theme();
+
+    [Inject]
+    public ThemeService ThemeService { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync() => CurrentTheme = await ThemeService.GetCurrentThemeAsync() ?? new Theme();
+
+    private string GetPageStyle()
+    {
+        return $"background-color: {CurrentTheme.sBackColor}; color: {CurrentTheme.sForeColor};";
+    }
+}

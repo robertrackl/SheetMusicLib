@@ -77,6 +77,8 @@ public partial class RamLibContext : DbContext
 
     public virtual DbSet<Supplier> Suppliers { get; set; }
 
+    public virtual DbSet<Theme> Themes { get; set; }
+
     public virtual DbSet<User> Users { get; set; }
 
     public virtual DbSet<Work> Works { get; set; }

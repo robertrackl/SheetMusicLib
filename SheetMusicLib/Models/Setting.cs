@@ -7,21 +7,21 @@ using Microsoft.EntityFrameworkCore;
 namespace SheetMusicLib.Models;
 
 [Table("SETTINGS")]
-[Index("SSettingKey", Name = "IX_SETTINGS", IsUnique = true)]
+[Index("sSettingKey", Name = "IX_SETTINGS", IsUnique = true)]
 public partial class Setting
 {
     [Key]
     [Column("ID")]
-    public int Id { get; set; }
+    public int ID { get; set; }
 
     [Column("sSettingKey")]
     [StringLength(50)]
-    public string SSettingKey { get; set; } = null!;
+    public string sSettingKey { get; set; } = null!;
 
     [Column("sSettingValue")]
-    public string SSettingValue { get; set; } = null!;
+    public string sSettingValue { get; set; } = null!;
 
     [Column("sDescription")]
     [StringLength(255)]
-    public string? SDescription { get; set; }
+    public string? sDescription { get; set; }
 }

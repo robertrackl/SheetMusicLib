@@ -1,0 +1,81 @@
+﻿@page "/admin/themes"
+@using SheetMusicLib.Models
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.Extensions.Logging
+@inject NavigationManager NavigationManager
+@inject IDbContextFactory<RamLibContext> DbContextFactory
+@inject ILogger<ThemeSettings> Logger
+
+<h3>Theme Settings</h3>
+
+<p>Select a theme for the website:</p>
+
+<select @bind="SelectedThemeId">
+    @foreach (var theme in Themes)
+    {
+        <option value="@theme.ID">@theme.sName</option>
+    }
+</select>
+
+<button @onclick="SaveTheme">Save</button>
+
+@code {
+    private List<Theme> Themes = new List<Theme>();
+    private int SelectedThemeId { get; set; } = 1; // Default theme
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var RamLibContext = await DbContextFactory.CreateDbContextAsync();
+        Themes = await RamLibContext.Themes.ToListAsync();
+        // Load the currently selected theme from the SETTINGS table
+        var setting = await RamLibContext.Settings.FirstOrDefaultAsync(s => s.sSettingKey == "ThemeId");
+        if (setting != null)
+        {
+            SelectedThemeId = int.Parse(setting.sSettingValue);
+        }
+        else
+        {
+            // Create a default setting if it doesn't exist
+            Setting setting2 = new Setting() { sSettingKey = "ThemeId", sSettingValue = "1" };
+            RamLibContext.Settings.Add(setting2);
+            await RamLibContext.SaveChangesAsync();
+            SelectedThemeId = 1;
+        }
+    }
+
+    private async Task SaveTheme()
+    {
+        using var RamLibContext = await DbContextFactory.CreateDbContextAsync();
+
+        // Enable logging
+        var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+
+        try
+        {
+            // Save the selected theme to the SETTINGS table
+            var setting = await RamLibContext.Settings.FirstOrDefaultAsync(s => s.sSettingKey == "ThemeId");
+            if (setting != null)
+            {
+                setting.sSettingValue = SelectedThemeId.ToString();
+                RamLibContext.Settings.Update(setting);
+                await RamLibContext.SaveChangesAsync();
+            }
+            else
+            {
+                // Create a default setting if it doesn't exist
+                Setting setting2 = new Setting() { sSettingKey = "ThemeId", sSettingValue = SelectedThemeId.ToString() };
+                RamLibContext.Settings.Add(setting2);
+                await RamLibContext.SaveChangesAsync();
+            }
+
+
+            Logger.LogInformation($"Theme updated to {SelectedThemeId}");
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError($"Error updating theme: {ex.Message}");
+        }
+
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+    }
+}
